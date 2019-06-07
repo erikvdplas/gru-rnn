@@ -34,7 +34,7 @@ def softmax(input):
 # Hyper parameters
 N, h_size, o_size = vocab_size, vocab_size, vocab_size # Hidden size is set to vocab_size, assuming that level of abstractness is approximately proportional to vocab_size (but can be set to any other value).
 seq_length = 25 # Longer sequence lengths allow for lengthier latent dependencies to be trained.
-learning_rate = 1e-1
+learning_rate = 0.1
 
 # Model parameter initialization
 Wz = np.random.rand(h_size, N) * 0.1 - 0.05
@@ -69,7 +69,7 @@ def lossFun(inputs, targets, hprev):
         
         # Calculate hidden units
         h_hat[t] = tanh(np.dot(Wh, x[t]) + np.dot(Uh, np.multiply(r[t], h[t-1])) + bh)
-        h[t] = np.multiply(z[t], h[t-1]) + np.multiply((1 - z[t]), h_hat[t])
+        h[t] = np.multiply((1-z[t]), h[t-1]) + np.multiply((z[t]), h_hat[t])
         
         # Regular output unit
         y[t] = np.dot(Wy, h[t]) + by
